@@ -4,20 +4,30 @@ import "testing"
 
 func trap(height []int) int {
 
+	lenHeight := len(height)
+
+	if lenHeight < 3 {
+		return 0
+	}
+	left, right := 0, lenHeight-1 // indexes
+	maxLeft, maxRight := 0, 0
 	totalVolume := 0
 
-	for i := range height {
-		leftMax := 0
-		rightMax := 0
-		for j := i - 1; j >= 0; j-- {
-			leftMax = max(leftMax, height[j])
-		}
-		for j := i + 1; j < len(height); j++ {
-			rightMax = max(rightMax, height[j])
-		}
-		volume := min(leftMax, rightMax) - height[i]
-		if volume > 0 {
-			totalVolume += volume
+	for left < right {
+		if height[left] < height[right] {
+			if height[left] > maxLeft {
+				maxLeft = height[left]
+			} else {
+				totalVolume += maxLeft - height[left]
+			}
+			left++
+		} else {
+			if height[right] > maxRight {
+				maxRight = height[right]
+			} else {
+				totalVolume += maxRight - height[right]
+			}
+			right--
 		}
 	}
 
